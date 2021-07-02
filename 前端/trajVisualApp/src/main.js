@@ -8,12 +8,16 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import 'leaflet/dist/leaflet.css'
+import * as L from 'leaflet'
+
 Vue.use(router);
 Vue.use(ElementUI);
 Vue.use(store);
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false
+Vue.L = Vue.prototype.$L = L
 
 new Vue({
 	router,
@@ -47,6 +51,14 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(router => {
 	window.scroll(0, 0);
+});
+
+/* Leaflet icon */
+delete L.Icon.Default.prototype._getIconUrl
+L.Icon.Default.mergeOptions({
+	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+	iconUrl: require('leaflet/dist/images/marker-icon.png'),
+	shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 
