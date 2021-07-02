@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录测试</title>
+</head>
+<body>
+{#<form action="" method="post">#}
+    {% csrf_token %}
+    <p>
+        <label>用户名：</label>
+        <input type="text" name="userName" placeholder="请输入用户名" id="userName"/>
+    </p>
+    <p>
+        <label>密&emsp;码：</label>
+        <input type="password" name="userPass" placeholder="请输入密码" id="userPass"/>
+    </p>
+    <p>
+        &emsp;&emsp;&emsp;&emsp;<input type="submit" value="登录" id="submit"/>
+    </p>
+{#</form>#}
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+<script>
+    $(function(){
+        $("#submit").click(function(){
+            var userName = $("#userName").val();
+            var userPass = $("#userPass").val();
+            $.ajax({
+                url: "/login/userLogin/",
+                type: "POST",
+{#               dataType: "json",#}
+                data: {userName: userName, userPass: userPass},
+                success: function(result){
+                    alert("前端成功向后端传输数据");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
