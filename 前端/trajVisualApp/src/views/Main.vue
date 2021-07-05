@@ -33,6 +33,9 @@
 </template>
 
 <script>
+//引入鹰眼图组件
+import MiniMap from 'leaflet-minimap'
+import 'leaflet-minimap/dist/Control.MiniMap.min.css'
 export default {
 	name: "Main",
 	data() {
@@ -94,21 +97,29 @@ export default {
 				iconSize: [15, 15]     //点大小
 			});
 			
-			//初始化调用数据
+			//添加鹰眼图
+			var osmUrl = "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}";     //ArcGis地图
+			var osm = new L.tileLayer(osmUrl, {minZoom: 0, maxZoom: 13});
+			var miniMap = new MiniMap(osm, {toggleDisplay: true, width: 300, height: 300}).addTo(this.map);
+			
+			//初始化调用轨迹数据
 			this.getTrajData();
 			
+			//初始化绘制轨迹
+			this.drawTrajectory();
+			
 			var that = this;
-			//缩放事件(与拖动地图事件重复)
-			// this.map.on("zoomend", function(e){
-			// 	// var zoom_val = e.target.getZoom();     //获取缩放级别
-			// 	that.getTrajData();
-			// });
 			//拖动地图事件
 			this.map.on("moveend", function(e){
 				that.getTrajData();
 			});
 			
-			
+			//地图点击事件
+			var clickpop = L.popup();
+			this.map.on("click", function(e){
+				content = "经度：" + e.latlng.lng + "<br/>纬度：" + e.latlng.lat;
+				clickpop.setLatLng(e.latlng).setContent(content).openOn(that.map);
+			});
 		},
 		//读取轨迹数据
 		getTrajData() {
@@ -150,6 +161,16 @@ export default {
 				this.basicLayer.setUrl(this.tianditu_3_tile, false);
 				this.markLayer.setUrl(this.tianditu_3_marker, false);
 			}
+		},
+		//绘制轨迹
+		drawTrajectory() {
+			var latlngs = [
+			    [[17.385044, 78.486671], [16.506174, 80.648015], [17.686816, 83.218482]],
+			    [[13.082680, 80.270718], [12.971599, 77.594563],[15.828126, 78.037279]]
+			];
+			var multiPolyLineOptions = {color: 'red'};
+			var multiPolyline = L.polyline(latlngs, multiPolyLineOptions);
+			multiPolyline.addTo(this.map);
 		}
 	},
 	mounted() {

@@ -8,8 +8,8 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import 'leaflet/dist/leaflet.css'
 import * as L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 Vue.use(router);
 Vue.use(ElementUI);
