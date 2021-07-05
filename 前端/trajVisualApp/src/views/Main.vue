@@ -26,7 +26,9 @@ export default {
 	name: "Main",
 	data() {
 		return {
-			map: ""
+			map: "",
+			trajIcon: "",
+			// point: ""
 		};
 	},
 	methods: {
@@ -58,12 +60,21 @@ export default {
 			).addTo(this.map);
 			// this.map.removeLayer(name);     //移除图层
 			
-			var that = this;
-			//缩放事件
-			this.map.on("zoomend", function(e){
-				// var zoom_val = e.target.getZoom();     //获取缩放级别
-				that.getTrajData();
+			//初始化图标
+			this.trajIcon = L.divIcon({
+				className: 'my-div-icon',     //自定义icon css样式
+				iconSize: [15, 15]     //点大小
 			});
+			
+			//初始化调用数据
+			this.getTrajData();
+			
+			var that = this;
+			//缩放事件(与拖动地图事件重复)
+			// this.map.on("zoomend", function(e){
+			// 	// var zoom_val = e.target.getZoom();     //获取缩放级别
+			// 	that.getTrajData();
+			// });
 			//拖动地图事件
 			this.map.on("moveend", function(e){
 				that.getTrajData();
@@ -77,8 +88,26 @@ export default {
 			var leftdown_lat = this.map.getBounds().getSouthWest().lat;     //左下角纬度
 			var rightup_lng = this.map.getBounds().getNorthEast().lng;      //右上角经度
 			var rightup_lat = this.map.getBounds().getNorthEast().lat;      //右上角纬度
-			console.log(leftdown_lat)
+			// console.log(leftdown_lat)
 			//向后端发送请求，读取轨迹数据
+			
+			//模拟JSON获取轨迹数据
+			var group = L.layerGroup().addTo(this.map);      //图层组
+			this.axios.get('/point.json')
+			.then(function(response){
+				var point = response.data;     //全部轨迹数据
+				for(var i=0; i<point.length; i++){
+					var lon = point[i].lon;
+					var lat = point[i].lat;
+					var marker = L.marker([lon, lat], {
+						icon: this.trajIcon,
+					}).addTo(group);
+				}
+			}.bind(this))
+			.catch(function(error){
+				console.log(error);
+			});
+			
 			
 		}
 	},
@@ -103,5 +132,11 @@ p:hover {
 	width: 100%;
 	height: calc(95vh);
 	z-index: 1;
+}
+.my-div-icon {
+	width: 15px;
+	height: 15px;
+	background-color: red;
+	border-radius: 50%;
 }
 </style>
