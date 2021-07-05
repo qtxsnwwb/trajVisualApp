@@ -5,6 +5,17 @@
 			<el-header style="background-color: #18223d;height: calc(5vh);">
 				<!-- 此处写导航栏代码 -->
 				
+				<!-- 切换地图下拉菜单 -->
+				<el-dropdown @command="changeMap">
+					<span class="el-dropdown-link">
+						切换地图<i class="el-icon-arrow-down el-icon--right"></i> 
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_1">天地图街道图</el-dropdown-item>
+						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_2">天地图影像图</el-dropdown-item>
+						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_3">天地图地形图</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
 				<!-- 登录 -->
 				<p v-if="$store.state.isLogin == true">
 					欢迎您，{{$store.state.userName}}
@@ -26,9 +37,17 @@ export default {
 	name: "Main",
 	data() {
 		return {
-			map: "",
-			trajIcon: "",
+			map: "",     //地图
+			trajIcon: "",     //图标
 			// point: ""
+			tianditu_1_tile: "",     //天地图矢量底图
+			tianditu_1_marker: "",      //天地图矢量标记
+			tianditu_2_tile: "",     //天地图影像底图
+			tianditu_2_marker: "",      //天地图影像标记
+			tianditu_3_tile: "",     //天地图地形底图
+			tianditu_3_marker: "",      //天地图地形标记
+			basicLayer: "",       //底图图层
+			markerLayer: "",      //注解图层
 		};
 	},
 	methods: {
@@ -43,6 +62,7 @@ export default {
 		},
 		//初始化地图
 		initMap() {
+			//初始化地图对象
 			this.map = L.map("map", {
 				center: [40.02404009136253, 116.50641060224784],     //地图中心
 				zoom: 11,    //缩放比例
@@ -50,13 +70,21 @@ export default {
 				doubleClickZoom: false,    //禁用双击放大
 				attributionControl: false     //移除右下角Leaflet标识
 			});
+			//初始化地图图层（墨卡托坐标）
+			this.tianditu_1_tile = "http://t4.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
+			this.tianditu_1_marker = "http://t4.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
+			this.tianditu_2_tile = "http://t4.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
+			this.tianditu_2_marker = "http://t4.tianditu.gov.cn/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
+			this.tianditu_3_tile = "http://t4.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
+			this.tiandutu_3_marker = "http://t4.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7";
 			//天地图影像图底图（墨卡托坐标）
-			let basicLayer = L.tileLayer(
-				"http://t4.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7",
+			this.basicLayer = L.tileLayer(
+				this.tianditu_1_tile,
 			).addTo(this.map);
+			
 			//天地图影像图标记（墨卡托坐标）
-			let markLayer = L.tileLayer(
-				"http://t4.tianditu.gov.cn/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=efe5e7d29b0c9728d44edba8dc08c8d7"
+			this.markLayer = L.tileLayer(
+				this.tianditu_1_marker,
 			).addTo(this.map);
 			// this.map.removeLayer(name);     //移除图层
 			
@@ -109,6 +137,19 @@ export default {
 			});
 			
 			
+		},
+		//切换地图
+		changeMap(command) {
+			if(command == "tianditu_1"){
+				this.basicLayer.setUrl(this.tianditu_1_tile, false);
+				this.markLayer.setUrl(this.tianditu_1_marker, false);
+			}else if(command == "tianditu_2"){
+				this.basicLayer.setUrl(this.tianditu_2_tile, false);
+				this.markLayer.setUrl(this.tianditu_2_marker, false);
+			}else{
+				this.basicLayer.setUrl(this.tianditu_3_tile, false);
+				this.markLayer.setUrl(this.tianditu_3_marker, false);
+			}
 		}
 	},
 	mounted() {
@@ -121,6 +162,13 @@ export default {
 * {
 	padding: 0;
 	margin: 0;
+}
+.el-dropdown-link {
+	cursor: pointer;
+	color: #409EFF;
+}
+.el-icon-arrow-down {
+	font-size: 12px;
 }
 p {
 	color: #FFFFFF;
