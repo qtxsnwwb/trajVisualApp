@@ -25,7 +25,7 @@
 			</el-header>
 			<!-- 主体部分 -->
 			<el-main style="padding: 0;">
-				<div id="map"></div>
+				<div id="map" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"></div>
 			</el-main>
 		</el-container>
 	</div>
@@ -51,6 +51,7 @@ export default {
 			tianditu_3_marker: "",      //天地图地形标记
 			basicLayer: "",       //底图图层
 			markerLayer: "",      //注解图层
+			loading: true       //加载动画
 		};
 	},
 	methods: {
@@ -120,9 +121,13 @@ export default {
 				content = "经度：" + e.latlng.lng + "<br/>纬度：" + e.latlng.lat;
 				clickpop.setLatLng(e.latlng).setContent(content).openOn(that.map);
 			});
+			
+			//关闭加载动画
+			this.loading = false;
 		},
 		//读取轨迹数据
 		getTrajData() {
+			this.loading = true;     //开启加载动画
 			var leftdown_lng = this.map.getBounds().getSouthWest().lng;     //左下角经度
 			var leftdown_lat = this.map.getBounds().getSouthWest().lat;     //左下角纬度
 			var rightup_lng = this.map.getBounds().getNorthEast().lng;      //右上角经度
@@ -147,10 +152,11 @@ export default {
 				console.log(error);
 			});
 			
-			
+			this.loading = false;     //关闭加载动画
 		},
 		//切换地图
 		changeMap(command) {
+			this.loading = true;      //开启加载动画
 			if(command == "tianditu_1"){
 				this.basicLayer.setUrl(this.tianditu_1_tile, false);
 				this.markLayer.setUrl(this.tianditu_1_marker, false);
@@ -161,9 +167,11 @@ export default {
 				this.basicLayer.setUrl(this.tianditu_3_tile, false);
 				this.markLayer.setUrl(this.tianditu_3_marker, false);
 			}
+			this.loading = false;       //关闭加载动画
 		},
 		//绘制轨迹
 		drawTrajectory() {
+			this.loading = true;        //开启加载动画
 			var latlngs = [
 			    [[17.385044, 78.486671], [16.506174, 80.648015], [17.686816, 83.218482]],
 			    [[13.082680, 80.270718], [12.971599, 77.594563],[15.828126, 78.037279]]
@@ -171,6 +179,7 @@ export default {
 			var multiPolyLineOptions = {color: 'red'};
 			var multiPolyline = L.polyline(latlngs, multiPolyLineOptions);
 			multiPolyline.addTo(this.map);
+			this.loading = false;         //关闭加载动画
 		}
 	},
 	mounted() {
