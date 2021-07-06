@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_framework_mongoengine',
-    'mongoengine',
     'users'
 ]
 
@@ -143,12 +141,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'https://localhost:8000'
 # )
 
-from mongoengine import connect
-
-MONGO_DATABASE_NAME = 'trajVisualApp'
-MONGO_HOST = '127.0.0.1'
-MONGO_PORT = 27017
-connect(MONGO_DATABASE_NAME, host=MONGO_HOST, port=MONGO_PORT)
 
 
 

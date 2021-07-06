@@ -4,24 +4,62 @@
 			<!-- 导航栏 -->
 			<el-header style="background-color: #18223d;height: calc(5vh);">
 				<!-- 此处写导航栏代码 -->
-				
-				<!-- 切换地图下拉菜单 -->
-				<el-dropdown @command="changeMap">
-					<span class="el-dropdown-link">
-						切换地图<i class="el-icon-arrow-down el-icon--right"></i> 
-					</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_1">天地图街道图</el-dropdown-item>
-						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_2">天地图影像图</el-dropdown-item>
-						<el-dropdown-item icon="el-icon-circle-check" command="tianditu_3">天地图地形图</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-				<!-- 登录 -->
-				<p v-if="$store.state.isLogin == true">
-					欢迎您，{{$store.state.userName}}
-					<button @click="logout">注销</button>
-				</p>
-				<p v-else @click="skipToLogin">登录</p>
+				<div>
+					<el-row>
+						<el-col :span="20">
+							<el-menu class="el-menu-traj"
+									mode="horizontal"
+									background-color="#18223d"
+									text-color="#fffefd"
+									active-text-color="#ffffff"
+									style="border-bottom: none;">
+								<el-row>
+									<!-- 标题 -->
+									<el-col :span="5" :xs="0">
+										<el-menu-item style="text-align: left;">
+											<span class="title-span">船舶轨迹大数据可视化系统</span>
+										</el-menu-item>
+									</el-col>
+									<el-col :span="1.5" :xs="7" style="margin-left: 15px;">
+										<el-menu-item>
+											<span class="func-span">船舶交通网络</span>
+										</el-menu-item>
+									</el-col>
+									<el-col :span="1.5" :xs="7">
+										<el-menu-item>
+											<span class="func-span">轨迹聚类</span>
+										</el-menu-item>
+									</el-col>
+									<el-col :span="1.5" :xs="7">
+										<el-menu-item>
+											<!-- 切换地图下拉菜单 -->
+											<el-dropdown @command="changeMap">
+												<span class="el-dropdown-link">
+													切换地图<i class="el-icon-arrow-down el-icon--right"></i> 
+												</span>
+												<el-dropdown-menu slot="dropdown">
+													<el-dropdown-item icon="el-icon-circle-check" command="tianditu_1">天地图街道图</el-dropdown-item>
+													<el-dropdown-item icon="el-icon-circle-check" command="tianditu_2">天地图影像图</el-dropdown-item>
+													<el-dropdown-item icon="el-icon-circle-check" command="tianditu_3">天地图地形图</el-dropdown-item>
+												</el-dropdown-menu>
+											</el-dropdown>
+										</el-menu-item>
+									</el-col>
+								</el-row>
+							</el-menu>
+						</el-col>
+						<!-- 登录 -->
+						<el-col :span="4" xs="2" style="text-align: right;">
+							<div class="rightsection">
+								<span v-if="$store.state.isLogin == true">
+									欢迎您，{{$store.state.userName}}
+									<span class="btn-click" @click="logout">退出</span>
+								</span>
+								<span class="btn-click" v-else @click="skipToLogin">登录</span>
+							</div>
+						</el-col>
+					</el-row>
+				</div>
 			</el-header>
 			<!-- 主体部分 -->
 			<el-main style="padding: 0;">
@@ -193,18 +231,35 @@ export default {
 	padding: 0;
 	margin: 0;
 }
-.el-dropdown-link {
+.title-span {
+	font-size: 25px;
+}
+.func-span {
+	font-size: 18px;
+}
+.el-menu-item {
+	text-align: center;
+}
+.el-menu-item:hover {
+	background-color: rgba($color: #ffffff, $alpha: 0.2) !important;
+}
+.rightsection {
+	line-height: 60px;
+	font-size: 18px;
+	color: #ffffff;
+}
+.btn-click:hover {
+	padding: 15px;
 	cursor: pointer;
-	color: #409EFF;
+	background-color: rgba($color: #ffffff, $alpha: 0.2);
+}
+.el-dropdown-link {
+	// cursor: pointer;
+	color: #ffffff;
+	font-size: 18px;
 }
 .el-icon-arrow-down {
 	font-size: 12px;
-}
-p {
-	color: #FFFFFF;
-}
-p:hover {
-	cursor: pointer;
 }
 #map {
 	width: 100%;

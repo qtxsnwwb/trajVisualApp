@@ -140,7 +140,13 @@ export default {
 	background-color: #FFFFFF;
 	border: 1px solid #DCDFE6;
 	width: 360px;
-	margin: 180px auto;
+	height: 310px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
