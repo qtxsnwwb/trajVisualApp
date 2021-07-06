@@ -5,8 +5,8 @@ from . import views
 
 app_name = 'users'
 # router = routers.DefaultRouter()       # 定义默认的路由对象
-# router.register(r'users', views.login)
+# router.register(r'userLogin', views.UserViewSet)      # 注册用户视图集
 urlpatterns = [
-    # path(r'', include('users.urls'))
-    path(r'userLogin/', views.LoginView),
+    # path(r'', include(router.urls))       # 添加路由映射关系
+    path(r'userLogin/', views.login),
 ]

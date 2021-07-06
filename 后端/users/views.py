@@ -1,25 +1,41 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework.views import APIView
-from rest_framework_mongoengine import generics
+from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.views import APIView
 from .serializers import *
 from .models import UserModel
 
-# Create your views here.
 
-# def login(request):
-#     userName = request.POST.get("userName")
-#     userPass = request.POST.get("userPass")
-#     print(userName, userPass)
+def login(request):
+    """
+    登录视图
+    :param request:
+    :return:
+    """
+    userName = request.POST.get("userName")
+    userPass = request.POST.get("userPass")
+
+    result = UserModel.objects.filter(userName=userName, userPass=userPass).first()
+    if result is not None:
+        return HttpResponse("success")
+    # serializers = UserSerializers(result)
+    return HttpResponse("error")
+
+# 用户视图集
+# class UserView(APIView):
 #
-#     return  HttpResponse("success")
-
-# 登录视图
-class LoginView(APIView):
-    def post(self, request):
-        data = request.data
-        serializer = UserSerializers(UserModel.objects.all(), many=True)
-        print(serializer.data)
-        return Response("success", status=status.HTTP_200_OK)
+#     def get(self, request):
+#         """
+#         登录视图
+#         :param request:
+#         :return:
+#         """
+#         userName = request.GET.get("userName")
+#         userPass = request.POST.get("userPass")
+#         print(userName, userPass)
+#         obj = UserModel.objects.filter(userName=userName, userPass=userPass).first()
+#         print(obj)
+#         print(type(obj))
+#         print(obj.userName)
+#         print(obj.userPass)
+#         return Response("success")

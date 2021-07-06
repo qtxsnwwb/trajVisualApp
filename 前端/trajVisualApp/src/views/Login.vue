@@ -64,7 +64,7 @@ export default {
 					var params = new URLSearchParams();
 					params.append("userName", this.form.username);
 					params.append("userPass", this.form.password);
-					this.axios.post('http://127.0.0.1:8000/login/userLogin/', params)
+					this.axios.post('http://127.0.0.1:8000/users/userLogin/', params)
 					.then(function(response){
 						if(response.data == "success"){
 							//存储用户名
