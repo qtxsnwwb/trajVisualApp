@@ -16,7 +16,7 @@
 		</div>
 		
 		<!-- 弹出框 -->
-		<el-dialog title="温馨提示" :visible.sync="dialogVisible" width="30%">
+		<el-dialog title="温馨提示" :visible.sync="dialogVisible" width="30%" :modal-append-to-body="false">
 			<span>{{dialogInfo}}</span>
 			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -64,44 +64,44 @@ export default {
 					var params = new URLSearchParams();
 					params.append("userName", this.form.username);
 					params.append("userPass", this.form.password);
-					this.axios.post('http://127.0.0.1:8000/users/userLogin/', params)
-					.then(function(response){
-						if(response.data == "success"){
-							//存储用户名
-							this.$store.dispatch("setUserNameAction", this.form.username);
-							localStorage.setItem("userName", this.form.username);
+					// this.axios.post('http://127.0.0.1:8000/users/userLogin/', params)
+					// .then(function(response){
+					// 	if(response.data == "success"){
+					// 		//存储用户名
+					// 		this.$store.dispatch("setUserNameAction", this.form.username);
+					// 		localStorage.setItem("userName", this.form.username);
 							
-							//使用 vue-router 路由到指定页面，该方式称之为编程式导航
-							this.$router.push("/main");
-						}else{
-								this.dialogInfo = "用户名或密码输入错误";
-								this.dialogVisible = true;
-								this.form.username = "";
-								this.form.password = "";
-								return false;
-						}
-					}.bind(this))
-					.catch(function(error){
-						console.log(error);
-					});
+					// 		//使用 vue-router 路由到指定页面，该方式称之为编程式导航
+					// 		this.$router.push("/main");
+					// 	}else{
+					// 			this.dialogInfo = "用户名或密码输入错误";
+					// 			this.dialogVisible = true;
+					// 			this.form.username = "";
+					// 			this.form.password = "";
+					// 			return false;
+					// 	}
+					// }.bind(this))
+					// .catch(function(error){
+					// 	console.log(error);
+					// });
 					
 
-					// this.axios.get('/user.json')
-					// 		.then(response => (this.userInfo = response.data));
-					// if(this.userInfo.loginSuccess == "yes"){      //验证成功
-					// 	//存储用户名
-					// 	this.$store.dispatch("setUserNameAction", this.form.username);
-					// 	localStorage.setItem("userName", this.form.username);
+					this.axios.get('/user.json')
+							.then(response => (this.userInfo = response.data));
+					if(this.userInfo.loginSuccess == "yes"){      //验证成功
+						//存储用户名
+						this.$store.dispatch("setUserNameAction", this.form.username);
+						localStorage.setItem("userName", this.form.username);
 						
-					// 	//使用 vue-router 路由到指定页面，该方式称之为编程式导航
-					// 	this.$router.push("/main");
-					// }else{      //验证失败
-					// 	this.dialogInfo = "用户名或密码输入错误";
-					// 	this.dialogVisible = true;
-					// 	this.form.username = "";
-					// 	this.form.password = "";
-					// 	return false;
-					// }
+						//使用 vue-router 路由到指定页面，该方式称之为编程式导航
+						this.$router.push("/main");
+					}else{      //验证失败
+						this.dialogInfo = "用户名或密码输入错误";
+						this.dialogVisible = true;
+						this.form.username = "";
+						this.form.password = "";
+						return false;
+					}
 				} else {
 					this.dialogInfo = "请输入账号和密码";
 					this.dialogVisible = true;
