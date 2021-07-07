@@ -49,11 +49,11 @@
 							</el-menu>
 						</el-col>
 						<!-- 登录 -->
-						<el-col :span="4" xs="2" style="text-align: right;">
+						<el-col :span="4" :xs="2" style="text-align: right;">
 							<div class="rightsection">
 								<span v-if="$store.state.isLogin == true">
 									欢迎您，{{$store.state.userName}}
-									<span class="btn-click" @click="logout">退出</span>
+									<el-button type="primary" @click="logout">退出</el-button>
 								</span>
 								<span class="btn-click" v-else @click="skipToLogin">登录</span>
 							</div>

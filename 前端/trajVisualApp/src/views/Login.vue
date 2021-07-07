@@ -47,9 +47,7 @@ export default {
 
 			// 对话框显示和隐藏
 			dialogVisible: false,
-			dialogInfo: '',
-			
-			userInfo: ''
+			dialogInfo: ''
 		}
 	},
 	methods: {
@@ -57,16 +55,20 @@ export default {
 			// 为表单绑定验证功能
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					//存储登录状态
-					this.$store.dispatch("userLogin", true);
-					localStorage.setItem("Flag", "isLogin");
+					// //存储登录状态
+					// this.$store.dispatch("userLogin", true);
+					// localStorage.setItem("Flag", "isLogin");
 					//进行数据库验证
 					var params = new URLSearchParams();
 					params.append("userName", this.form.username);
 					params.append("userPass", this.form.password);
+					//前后端联调代码
 					// this.axios.post('http://127.0.0.1:8000/users/userLogin/', params)
 					// .then(function(response){
 					// 	if(response.data == "success"){
+					// 		//存储登录状态
+					// 		this.$store.dispatch("userLogin", true);
+					// 		localStorage.setItem("Flag", "isLogin");
 					// 		//存储用户名
 					// 		this.$store.dispatch("setUserNameAction", this.form.username);
 					// 		localStorage.setItem("userName", this.form.username);
@@ -85,23 +87,28 @@ export default {
 					// 	console.log(error);
 					// });
 					
-
+					//前端本地测试代码
 					this.axios.get('/user.json')
-							.then(response => (this.userInfo = response.data));
-					if(this.userInfo.loginSuccess == "yes"){      //验证成功
-						//存储用户名
-						this.$store.dispatch("setUserNameAction", this.form.username);
-						localStorage.setItem("userName", this.form.username);
-						
-						//使用 vue-router 路由到指定页面，该方式称之为编程式导航
-						this.$router.push("/main");
-					}else{      //验证失败
-						this.dialogInfo = "用户名或密码输入错误";
-						this.dialogVisible = true;
-						this.form.username = "";
-						this.form.password = "";
-						return false;
-					}
+					.then(function(response) {
+						if(response.data.loginSuccess == "yes"){      //验证成功
+							//存储登录状态
+							this.$store.dispatch("userLogin", true);
+							localStorage.setItem("Flag", "isLogin");
+							//存储用户名
+							this.$store.dispatch("setUserNameAction", this.form.username);
+							localStorage.setItem("userName", this.form.username);
+							
+							//使用 vue-router 路由到指定页面，该方式称之为编程式导航
+							this.$router.push("/main");
+						}else{      //验证失败
+							this.dialogInfo = "用户名或密码输入错误";
+							this.dialogVisible = true;
+							this.form.username = "";
+							this.form.password = "";
+							return false;
+						}
+					}.bind(this));
+					
 				} else {
 					this.dialogInfo = "请输入账号和密码";
 					this.dialogVisible = true;
