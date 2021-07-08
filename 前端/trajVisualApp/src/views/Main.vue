@@ -156,7 +156,7 @@ export default {
 			//地图点击事件
 			var clickpop = L.popup();
 			this.map.on("click", function(e){
-				content = "经度：" + e.latlng.lng + "<br/>纬度：" + e.latlng.lat;
+				var content = "经度：" + e.latlng.lng + "<br/>纬度：" + e.latlng.lat;
 				clickpop.setLatLng(e.latlng).setContent(content).openOn(that.map);
 			});
 			
