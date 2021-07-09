@@ -47,13 +47,9 @@
 		</el-container>
 		
 		<!-- 抽屉 -->
-		<el-drawer title="后台管理系统" :visible.sync="drawer" :direction="direction" size="60%" class="hidden-sm-and-up">
-			<!-- <el-table :data="menu_content">
-				<el-table-column property="name" label="demo" width="100"></el-table-column>
-				<el-table-column property="date" label="demo2" width="100"></el-table-column>
-			</el-table> -->
+		<el-drawer title="后台管理系统" :visible.sync="drawer" :direction="direction" size="45%" class="hidden-sm-and-up">
 			<el-row>
-				<el-col :span="24" v-for="menu_item in menu_content">
+				<el-col :span="24" v-for="(menu_item, index) in menu_content">
 					<div class="drawer-menu-item">
 						{{menu_item.name}}
 					</div>
@@ -144,8 +140,7 @@ export default {
 	text-align: center;
 	color: #00193A;
 	font-size: 22px;
-	margin-top: 25px;
-	padding: 10px;
+	padding: 25px;
 }
 .drawer-menu-item:hover {
 	background-color: rgba($color: #808080, $alpha: 0.2) !important;
