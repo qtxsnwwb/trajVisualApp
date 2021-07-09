@@ -100,7 +100,7 @@ export default {
 			localStorage.removeItem("Flag");
 			this.$store.dispatch("userLogin", false);
 			this.$router.push("/login");
-		}
+		},
 	}
 }
 </script>
@@ -126,6 +126,10 @@ export default {
 	color: #ffffff;
 	font-size: 18px;
 	line-height: calc(5vh);
+}
+.nav-menu-item:hover {
+	cursor: pointer;
+	background-color: rgba($color: #FFFFFF, $alpha: 0.2) !important;
 }
 .nav-icon:hover {
 	cursor: pointer;
