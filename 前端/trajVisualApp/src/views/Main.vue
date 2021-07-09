@@ -15,7 +15,7 @@
 									style="border-bottom: none;">
 								<el-row>
 									<!-- 标题 -->
-									<el-col :span="5" :xs="0">
+									<el-col :span="5" :xs="0" class="hidden-sm-and-down">
 										<el-menu-item style="text-align: left;">
 											<span class="title-span">船舶轨迹大数据可视化系统</span>
 										</el-menu-item>
