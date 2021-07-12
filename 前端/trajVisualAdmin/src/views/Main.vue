@@ -20,6 +20,7 @@
 							</el-col>
 						</el-row>
 					</el-col>
+					<!-- 菜单图标 -->
 					<el-col :xs="9" class="hidden-sm-and-up">
 						<div class="nav-icon" @click="drawer = true">
 							<i class="el-icon-s-unfold" style="font-size: 30px;"></i>

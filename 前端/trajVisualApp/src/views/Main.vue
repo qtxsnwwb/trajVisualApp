@@ -5,38 +5,35 @@
 			<el-header style="background-color: #18223d;height: calc(5vh);">
 				<!-- 此处写导航栏代码 -->
 				<div>
-					<el-row>
-						<el-col :span="20">
+					<el-row type="flex">
+						<el-col :span="20" class="hidden-sm-and-down">
 							<el-menu class="el-menu-traj"
 									mode="horizontal"
 									background-color="#18223d"
 									text-color="#fffefd"
 									active-text-color="#ffffff"
 									style="border-bottom: none;">
-								<el-row>
+								<el-row type="flex">
 									<!-- 标题 -->
-									<el-col :span="5" :xs="0" class="hidden-sm-and-down">
-										<el-menu-item style="text-align: left;">
-											<span class="title-span">船舶轨迹大数据可视化系统</span>
-										</el-menu-item>
-									</el-col>
-									<el-col :span="1.5" :xs="7" style="margin-left: 15px;">
+									<el-col :span="7">
 										<el-menu-item>
-											<span class="func-span">船舶交通网络</span>
+											<div class="title-span">船舶轨迹大数据可视化系统</div>
 										</el-menu-item>
 									</el-col>
-									<el-col :span="1.5" :xs="7">
+									<!-- 菜单 -->
+									<el-col :span="1.5" v-for="menu_item in menu_content">
 										<el-menu-item>
-											<span class="func-span">轨迹聚类</span>
+											<div class="func-span">{{menu_item.name}}</div>
 										</el-menu-item>
 									</el-col>
-									<el-col :span="1.5" :xs="7">
+									<!-- 切换地图 -->
+									<el-col :span="1.5">
 										<el-menu-item>
 											<!-- 切换地图下拉菜单 -->
 											<el-dropdown @command="changeMap">
-												<span class="el-dropdown-link">
+												<div class="func-span">
 													切换地图<i class="el-icon-arrow-down el-icon--right"></i> 
-												</span>
+												</div>
 												<el-dropdown-menu slot="dropdown">
 													<el-dropdown-item icon="el-icon-circle-check" command="tianditu_1">天地图街道图</el-dropdown-item>
 													<el-dropdown-item icon="el-icon-circle-check" command="tianditu_2">天地图影像图</el-dropdown-item>
@@ -48,13 +45,19 @@
 								</el-row>
 							</el-menu>
 						</el-col>
+						<!-- 菜单图标 -->
+						<el-col :xs="9" class="hidden-sm-and-up">
+							<div class="nav-icon" @click="drawer = true">
+								<i class="el-icon-s-unfold" style="font-size: 30px;"></i>
+							</div>
+						</el-col>
 						<!-- 登录 -->
-						<el-col :span="4" :xs="2" style="text-align: right;">
+						<el-col :span="4" :xs="15">
 							<div class="rightsection">
-								<span v-if="$store.state.isLogin == true">
+								<div v-if="$store.state.isLogin == true">
 									欢迎您，{{$store.state.userName}}
-									<el-button type="primary" @click="logout">退出</el-button>
-								</span>
+									<el-button type="primary" @click="logout" style="margin-left: 5px;">退出</el-button>
+								</div>
 								<span class="btn-click" v-else @click="skipToLogin">登录</span>
 							</div>
 						</el-col>
@@ -66,8 +69,17 @@
 				<div id="map" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"></div>
 			</el-main>
 		</el-container>
+		
+		<!-- 抽屉 -->
+		<el-drawer title="船舶轨迹大数据可视化系统" :visible.sync="drawer" :direction="direction" size="45%" class="hidden-sm-and-up">
+			<el-menu v-for="menu_item in menu_content">
+				<el-menu-item @click="drawer = false">
+					<i class="el-icon-menu"></i>
+					{{menu_item.name}}
+				</el-menu-item>
+			</el-menu>
+		</el-drawer>
 	</div>
-	
 </template>
 
 <script>
@@ -81,6 +93,14 @@ export default {
 			map: "",     //地图
 			trajIcon: "",     //图标
 			// point: ""
+			menu_content: [      //导航栏菜单内容
+				{
+					name: "船舶交通网络"
+				},
+				{
+					name: "轨迹聚类"
+				}
+			],
 			tianditu_1_tile: "",     //天地图矢量底图
 			tianditu_1_marker: "",      //天地图矢量标记
 			tianditu_2_tile: "",     //天地图影像底图
@@ -89,7 +109,9 @@ export default {
 			tianditu_3_marker: "",      //天地图地形标记
 			basicLayer: "",       //底图图层
 			markerLayer: "",      //注解图层
-			loading: true       //加载动画
+			loading: true,        //加载动画
+			drawer: false,        //抽屉显示 
+			direction: "ltr",     //抽屉方向
 		};
 	},
 	methods: {
@@ -233,18 +255,23 @@ export default {
 }
 .title-span {
 	font-size: 25px;
+	text-align: left;
+	font-weight: bold;
+	line-height: calc(5vh);
+	overflow: hidden;
 }
 .func-span {
-	font-size: 18px;
-}
-.el-menu-item {
 	text-align: center;
+	font-size: 18px;
+	line-height: calc(5vh);
+	color: #ffffff;
 }
 .el-menu-item:hover {
 	background-color: rgba($color: #ffffff, $alpha: 0.2) !important;
 }
 .rightsection {
-	line-height: 60px;
+	text-align: right;
+	line-height: calc(5vh);
 	font-size: 18px;
 	color: #ffffff;
 }
@@ -253,13 +280,15 @@ export default {
 	cursor: pointer;
 	background-color: rgba($color: #ffffff, $alpha: 0.2);
 }
-.el-dropdown-link {
-	// cursor: pointer;
-	color: #ffffff;
-	font-size: 18px;
-}
 .el-icon-arrow-down {
 	font-size: 12px;
+}
+.nav-icon {
+	color: #ffffff;
+	line-height: calc(6vh);
+}
+.nav-icon:hover {
+	cursor: pointer;
 }
 #map {
 	width: 100%;
